@@ -3,7 +3,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import TodoForm from './components/TodoForm'
 import TodoList from './components/TodoList'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const data = [
   { id: 1, content: "Complete online JavsScript course", completed: true },
@@ -19,7 +19,27 @@ function App() {
   const [todos, setTodos] = useState(data);
   const [themeLight, setThemeLight] = useState(true);
 
+  const [filteredTodos, setFilteredTodos] = useState(todos);
+  const [filterStatus, setFilterStatus] = useState("all");
+
   const themeClass = themeLight ? "light" : "dark";
+
+  useEffect(() => {
+    const handleFilter = () => {
+      switch (filterStatus) {
+        case "active":
+          return setFilteredTodos(todos.filter((todo) => !todo.completed));
+
+        case "completed":
+          return setFilteredTodos(todos.filter((todo) => todo.completed));
+
+        default:
+          return setFilteredTodos(todos);
+      }
+    }
+
+    handleFilter();
+  }, [todos, filterStatus]);
 
   return (
     <>
@@ -28,7 +48,13 @@ function App() {
           <Header themeLight={themeLight} setThemeLight={setThemeLight} />
           <main>
             <TodoForm todos={todos} setTodos={setTodos} />
-            <TodoList />
+            <TodoList
+              todos={todos}
+              setTodos={setTodos}
+              filteredTodos={filteredTodos}
+              filterStatus={filterStatus}
+              setFilterStatus={setFilterStatus}
+             />
           </main>
           <Footer />
         </div>
