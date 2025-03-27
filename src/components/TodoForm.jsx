@@ -22,11 +22,10 @@ const TodoForm = ({ todos, setTodos }) => {
         }
     }
 
-    const generateId = () => {
-        const ids = Array.map((item) => item.id);
+    const generateId = (array) => {
+        const ids = array.map((item) => item.id);
         return Math.max(...ids) + 1;
     }
-
     
   return (
     <>
